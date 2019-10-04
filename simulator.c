@@ -88,7 +88,7 @@ int main(int argc, char** argv)
         printf("  Total failures:                   %d\n", total_failures); 
         printf("  Total attempts:                   %d\n", world_size * n_attempts); 
         printf("  Elapsed time:                     %g\n", finish-start );
-        printf("  Attempts per second:              %g\n", n_attempts/(finish-start) );
+        printf("  Attempts per second:              %g\n", world_size * n_attempts / (finish - start) );
         printf("  Percentage of failed attempts:    %g%%\n", 100.0 * failures / n_attempts);
         printf("\n##############################################################\n\n");
     }

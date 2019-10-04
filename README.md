@@ -4,8 +4,8 @@ This will simulate load to authentication server by storming calls to getpwuid a
     
       Total failures:                   0  
       Total attempts:                   4096
-      Elapsed time:                     0.862779
-      Attempts per second:              1186.86
+      Elapsed time:                     0.851012
+      Attempts per second:              4813.09
       Percentage of failed attempts:    0%
     
     ##############################################################
