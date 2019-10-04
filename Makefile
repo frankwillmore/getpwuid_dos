@@ -1,4 +1,4 @@
-JOBS?=1
+JOBS?=4
 
 exec: simulator
 	aprun -n ${JOBS} ./simulator
