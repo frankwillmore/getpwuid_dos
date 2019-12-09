@@ -21,20 +21,20 @@ int make_call(uid_t uid)
 
 int main(int argc, char** argv)
 {
-    int failures = 0;
-    int attempt = 0;
+    long failures = 0;
+    long attempt = 0;
 
     // parse args, get noise param, attempts
-    int n_attempts = 1024; // number of attempts to make
-    int noise = 1000; // max wait time between attempts in microseconds
-    int i;
+    long n_attempts = 1024; // number of attempts to make
+    long noise = 1000; // max wait time between attempts in microseconds
+    long i;
     for (i=0; i<argc; i++) 
     {   
-        if (strcmp("--n_attempts", argv[i])==0) n_attempts = (int)strtol(argv[++i], NULL, 10);
-        if (strcmp("--noise", argv[i])==0) noise = (int)strtol(argv[++i], NULL, 10);
+        if (strcmp("--n_attempts", argv[i])==0) n_attempts = (long)strtol(argv[++i], NULL, 10);
+        if (strcmp("--noise", argv[i])==0) noise = (long)strtol(argv[++i], NULL, 10);
     }
 
-    assert (n_attempts < INT_MAX);
+    assert (n_attempts < LONG_MAX);
     // get my uid
     // default values
     uid_t my_uid = geteuid();
@@ -66,14 +66,14 @@ int main(int argc, char** argv)
         failures += make_call(my_uid);
     }
 
-    int total_failures;
+    long total_failures;
 
     // MPI reduce results
     MPI_Reduce(
         &failures,			/* void* send_data */ 
         &total_failures,		/* void* recv_data */
         1,				/* int count */
-        MPI_INT,			/* MPI_Datatype datatype */
+        MPI_LONG,			/* MPI_Datatype datatype */
         MPI_SUM, 			/* MPI_Op op */
         0,				/* int root */
         MPI_COMM_WORLD			/* MPI_Comm communicator*/
@@ -85,8 +85,8 @@ int main(int argc, char** argv)
     if (world_rank == 0)
     {
         printf("\n##############################################################\n\n");
-        printf("  Total failures:                   %d\n", total_failures); 
-        printf("  Total attempts:                   %d\n", world_size * n_attempts); 
+        printf("  Total failures:                   %ld\n", total_failures); 
+        printf("  Total attempts:                   %ld\n", world_size * n_attempts); 
         printf("  Elapsed time:                     %g\n", finish-start );
         printf("  Attempts per second:              %g\n", world_size * n_attempts / (finish - start) );
         printf("  Percentage of failed attempts:    %g%%\n", 100.0 * failures / n_attempts);
