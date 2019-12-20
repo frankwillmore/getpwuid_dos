@@ -8,6 +8,44 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <dlfcn.h>
+
+
+int dl_make_call(char* function_lib, char* function_name, char** args)
+{
+    static void* handle;
+    static int (*function)();
+    static char* error;
+
+    // get the function, first time will open the lib
+    if (handle == NULL) 
+    {
+        handle = dlopen(function_lib, RTLD_LAZY);
+        if (!handle) {
+            fputs (dlerror(), stderr);
+            goto ERROR;
+        }
+    }
+
+    if (function == NULL)
+    {
+        // This awkward cast provided to you by the ISO standards team...
+        *(void **) (&function) = dlsym(handle, function_name);
+        if ((error = dlerror()) != NULL)  {
+            fputs(error, stderr);
+            goto ERROR;
+        }   
+    }
+
+    // call it
+    int retval = (int)(*function)();
+    return retval;
+
+ERROR:
+
+    return 0;
+}
+
 int make_call(uid_t uid)
 {
     struct passwd pwd;
