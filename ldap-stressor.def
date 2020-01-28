@@ -1,0 +1,17 @@
+Bootstrap: library
+From: gmk/demo/centos-vim
+
+%setup
+    [ -e getpwuid_dos ] || git clone https://github.com/frankwillmore/getpwuid_dos.git
+    [ -e getpwuid_dos ] && cd getpwuid_dos && make simulator
+
+%files
+    getpwuid_dos /getpwuid_dos
+
+%post
+    # cd /getpwuid_dos
+    # echo "done with %post"
+
+%runscript
+    # echo "ls the file"
+    ls /getpwuid_dos
